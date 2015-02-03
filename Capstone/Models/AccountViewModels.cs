@@ -52,7 +52,7 @@ namespace Capstone.Models
         [Display(Name = "Email")]
         [EmailAddress]
         public string Email { get; set; }
-
+        
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
@@ -64,10 +64,11 @@ namespace Capstone.Models
 
     public class RegisterViewModel
     {
-        
-        
-        
-        
+        [Required]
+        [Display(Name="Date")]
+        [DataType(DataType.Date)]
+        public string date { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -92,7 +93,52 @@ namespace Capstone.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [Required]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
 
+
+        [Required]
+        [Display(Name = "City")]
+        public string City { get; set; }
+
+        [Required]
+        [Display(Name = "State")]
+        public string State { get; set; }
+
+        [Required]
+        [DataType(DataType.PostalCode)]
+        [RegularExpression("\\d{5}",
+        ErrorMessage = "Zip Code is required and must be properly formatted.")]
+        [Display(Name = "Zip")]
+        public string Zip { get; set; }
+
+        [Required]
+        [Display(Name = "Country")]
+        public string Country { get; set; }
+
+        [Required]
+        [Display(Name = "Primary Phone")]
+        [Phone]
+        public string PrimaryPhone { get; set; }
+
+        [Display(Name = "Secondary Phone")]
+        [Phone]
+        public string SecondaryPhone { get; set; }
+
+        [Display(Name = "Fax")]
+        [Phone]
+        public string Fax { get; set; }
+
+        [Required]
+        [Display(Name = "Company Name")]
+        public string CompanyName { get; set; }
+
+        [Display(Name = "Branch/Location")]
+        public string Branch { get; set; }
+
+        [Display(Name = "Additional Info")]
+        public string AdditionalInfo { get; set; }
     }
 
     public class ResetPasswordViewModel

@@ -23,7 +23,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  */
 
-(function($) {
+(function ($) {
 
 $.extend($.fn, {
 	// http://docs.jquery.com/Plugins/Validation/validate
