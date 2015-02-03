@@ -177,10 +177,26 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Core\IRepository.cs" />
     <Compile Include="Core\Repository.cs" />
-    <Compile Include="Data\SampleTables.Designer.cs">
+    <Compile Include="Data\Food.cs">
+      <DependentUpon>TestingTables.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\TestingTables.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SampleTables.edmx</DependentUpon>
+      <DependentUpon>TestingTables.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\TestingTables.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestingTables.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\TestingTables.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestingTables.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\User.cs">
+      <DependentUpon>TestingTables.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -206,12 +222,22 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Data\SampleTables.edmx">
+    <EntityDeploy Include="Data\TestingTables.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SampleTables.Designer.cs</LastGenOutput>
+      <LastGenOutput>TestingTables.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Data\SampleTables.edmx.diagram">
-      <DependentUpon>SampleTables.edmx</DependentUpon>
+    <Content Include="Data\TestingTables.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TestingTables.edmx</DependentUpon>
+      <LastGenOutput>TestingTables.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Data\TestingTables.edmx.diagram">
+      <DependentUpon>TestingTables.edmx</DependentUpon>
+    </Content>
+    <Content Include="Data\TestingTables.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TestingTables.edmx</DependentUpon>
+      <LastGenOutput>TestingTables.cs</LastGenOutput>
     </Content>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
@@ -271,6 +297,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

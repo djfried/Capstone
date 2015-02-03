@@ -5,7 +5,7 @@ using System.Web;
 using Capstone.Container_Classes;
 using Capstone.Core;
 using Capstone.Models;
-using System.Data.Entity;
+using Capstone.Data;
 
 
 //return _Map(_repository.GetAll<Data.Resource>());
@@ -17,8 +17,8 @@ namespace Capstone.Managers
     public class EventManager
     {
         // Entities will be the connection to the database. 
-        //private static Entities _entities = new Entities();
-        //private IRepository _repository = new Repository(_entities);
+        private static Entities _entities = new Entities();
+        private IRepository _repository = new Repository(_entities);
 
         public EventViewModels CreateEvent(Event NewEvent)
         {

@@ -7,7 +7,6 @@ namespace Capstone.Container_Classes
 {
     public class User
     {
-        public int ID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
@@ -15,7 +14,7 @@ namespace Capstone.Container_Classes
         public string Address2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public int Zip { get; set; }
+        public string Zip { get; set; }
         public string PhoneHome { get; set; }
         public string PhoneCell { get; set; }
         public string PhoneOficce { get; set; }
