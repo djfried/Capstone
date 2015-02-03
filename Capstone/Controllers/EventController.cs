@@ -6,9 +6,10 @@ using System.Web.Mvc;
 
 namespace Capstone.Controllers
 {
-    public class HomeController : Controller
+    public class EventController : Controller
     {
-        public ActionResult Index()
+        // GET: Event
+        public ActionResult Create()
         {
             return View();
         }

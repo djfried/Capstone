@@ -173,6 +173,7 @@
     <Compile Include="Container_Classes\Event.cs" />
     <Compile Include="Container_Classes\User.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Core\IRepository.cs" />
