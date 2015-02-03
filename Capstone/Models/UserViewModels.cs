@@ -7,33 +7,13 @@ using Capstone.Container_Classes;
 namespace Capstone.Models
 {
 
+    // Interacts with the Event Manager to encapsulate the between the Database and the View. 
     public class UserViewModels
     {
 
-        private User _currentUser;
+        // Used to have an object that contains a single user to pass between view and model
+        // Used for CreateUser, UpdateUser, GetUser
+        public User User { get; set; }
 
-        public User CreateUser(User NewUser)
-        {
-
-            return null;
-        }
-
-        public User UpdateUser(User UpdatedUser)
-        {
-
-            return null;
-        }
-
-        public User GetUserByID(int TargetUserID)
-        {
-
-            return null;
-        }
-
-        public List<User> GetUsersByEventID(int EventID)
-        {
-
-            return null;
-        }
     }
 }
