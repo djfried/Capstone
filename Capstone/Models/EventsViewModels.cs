@@ -6,17 +6,10 @@ using Capstone.Container_Classes;
 
 namespace Capstone.Models
 {
-    // Used for returning a series of Events opposed to one 
     public class EventsViewModels
     {
-
-        public EventsViewModels()
-        {
-
-        }
-
-        // Object for holding several events between the view and the database.
-        // Used for AttendingEvents, ModeratingEvents, EventsCreatedByUser
+        // Used to grab multiple events at one time for the view
+        // Used by GetEventsAttendingByUserID, GetEventsCreatedByUser
         public List<Event> Events { get; set; }
     }
 }
