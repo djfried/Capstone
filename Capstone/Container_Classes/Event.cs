@@ -20,38 +20,68 @@ namespace Capstone.Container_Classes
         public string Status { get; set; }
 
         // Converts a Data.Event from database storage to container object
-        public static Event DataEventToEvent(Data.Event dEvent, User owner, List<Category> categories, List<Type> types)
+        public static Event DataEventToContainerEvent(Data.Event dataEvent, User owner, List<Category> categories, List<Type> types)
         {
-            Event newEvent = new Event();
+            Event containerEvent = new Event();
 
-            newEvent.Categories = categories;
-            newEvent.Description = dEvent.Description;
-            newEvent.EndDate = dEvent.EndDate;
-            newEvent.Location = dEvent.Location;
-            newEvent.Owner = owner;
-            newEvent.Logo_Path = dEvent.Logo_Path;
-            newEvent.StartDate = dEvent.StartDate;
-            newEvent.Status = dEvent.Status;
-            newEvent.Title = dEvent.Title;
-            newEvent.Types = types;
+            containerEvent.ID = dataEvent.Id;
+            containerEvent.Categories = categories;
+            containerEvent.Description = dataEvent.Description;
+            containerEvent.EndDate = dataEvent.EndDate;
+            containerEvent.Location = dataEvent.Location;
+            containerEvent.Owner = owner;
+            containerEvent.Logo_Path = dataEvent.Logo_Path;
+            containerEvent.StartDate = dataEvent.StartDate;
+            containerEvent.Status = dataEvent.Status;
+            containerEvent.Title = dataEvent.Title;
+            containerEvent.Types = types;
             
-            return newEvent;
+            return containerEvent;
+        }
+
+        public static Event DataEventToContainerEvent(Data.Event dataEvent)
+        {
+            Event containerEvent = new Event();
+
+            containerEvent.ID = dataEvent.Id;
+            containerEvent.Description = dataEvent.Description;
+            containerEvent.EndDate = dataEvent.EndDate;
+            containerEvent.Location = dataEvent.Location;
+            containerEvent.Logo_Path = dataEvent.Logo_Path;
+            containerEvent.StartDate = dataEvent.StartDate;
+            containerEvent.Status = dataEvent.Status;
+            containerEvent.Title = dataEvent.Title;
+
+            return containerEvent;
         }
 
         // Converts a Container Object to a Data.Event
-        public static Data.Event EventToDataEvent(Event oEvent)
+        public static Data.Event ContainerEventToDataEvent(Event containerEvent)
         {
-            Data.Event dEvent = new Data.Event();
+            Data.Event dataEvent = new Data.Event();
 
-            dEvent.Description = oEvent.Description;
-            dEvent.EndDate = oEvent.EndDate;
-            dEvent.Location = oEvent.Location;
-            dEvent.Logo_Path = oEvent.Logo_Path;
-            dEvent.StartDate = oEvent.StartDate;
-            dEvent.Status = oEvent.Status;
-            dEvent.Title = oEvent.Title;
+            dataEvent.Id = containerEvent.ID;
+            dataEvent.Description = containerEvent.Description;
+            dataEvent.EndDate = containerEvent.EndDate;
+            dataEvent.Location = containerEvent.Location;
+            dataEvent.Logo_Path = containerEvent.Logo_Path;
+            dataEvent.StartDate = containerEvent.StartDate;
+            dataEvent.Status = containerEvent.Status;
+            dataEvent.Title = containerEvent.Title;
 
-            return dEvent;
+            return dataEvent;
+        }
+
+        public static List<Data.Event> DatabaseToDataEvent(IEnumerable<Data.Event> source)
+        {
+            List<Data.Event> dataEvents = new List<Data.Event>();
+
+            foreach (Data.Event dataEvent in source)
+            {
+                dataEvents.Add(dataEvent);
+            }
+
+            return dataEvents;
         }
     }
 }

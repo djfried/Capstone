@@ -50,5 +50,17 @@ namespace Capstone.Container_Classes
 
             return dataTypes;
         }
+
+        public static List<Data.Type> DatabaseToDataTypes(IEnumerable<Data.Type> source)
+        {
+            List<Data.Type> dataTypes = new List<Data.Type>();
+
+            foreach (Data.Type dataType in source)
+            {
+                dataTypes.Add(dataType);
+            }
+
+            return dataTypes;
+        }
     }
 }
