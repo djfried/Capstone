@@ -121,7 +121,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.FoodPreference, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.FoodPreference, new SelectList(Model.Food,"Value","Text"), "Select") })
+            @Html.DropDownListFor(m => m.FoodPreference, new SelectList(Model.Food, "Value", "Text"), new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
@@ -132,7 +132,7 @@
     </div>
     <div class="form-inline">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-success value=" register" />
+            <input type="submit" class="btn btn-success" value="Register" />
             <input type="button" class="btn btn-danger" value="Cancel" />
         </div>
     </div>

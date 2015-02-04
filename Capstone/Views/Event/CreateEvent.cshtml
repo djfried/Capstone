@@ -6,11 +6,11 @@
 
 @using (Html.BeginForm("CreateEvent", "Event", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
-
+    @Html.AntiForgeryToken()
     <h2>Create a new event.</h2>
 
     <hr />
-
+    @Html.ValidationSummary()
     <div class="form-group">
         @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
@@ -19,17 +19,24 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.StartDate, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.EventDate, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.StartDate, new { @type="datetime-local", @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.StartDate, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.EventDate, new { @type="date", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.EventDate, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.EndDate, new { @class = "col-md-2 control-label" })
+        @Html.LabelFor(m => m.StartTime, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.EndDate, new { @type = "datetime-local", @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.EndDate, "", new { @class = "text-danger" })
+            @Html.TextBoxFor(m => m.StartTime, new { @type = "time", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.StartTime, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EndTime, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.EndTime, new { @type = "time", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.EndTime, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
@@ -40,16 +47,9 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(m => m.Group, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Group, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Group, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
         @Html.LabelFor(m => m.Type, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Type, new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.Type, new SelectList(Model.TypeList, "Value", "Text"), new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Type, "", new { @class = "text-danger" })
         </div>
     </div>
@@ -58,6 +58,13 @@
         <div class="col-md-10">
             @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.LogoPath, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.LogoPath, new {@type="file", @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.LogoPath, "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-inline">

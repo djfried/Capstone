@@ -24,30 +24,35 @@ namespace Capstone.Models
         public string Title { get; set; }
 
         [Required]
-        [Display(Name = "Start Date")]
-        public DateTime StartDate { get; set; }
+        [Display(Name = "Event Date")]
+        public DateTime EventDate { get; set; }
 
         [Required]
-        [Display(Name = "End Date")]
-        public DateTime EndDate { get; set; }
+        [Display(Name = "Start Time")]
+        public DateTime StartTime { get; set; }
+
+        [Required]
+        [Display(Name = "End Time")]
+        public DateTime EndTime{ get; set; }
 
         [Required]
         [Display(Name = "Location")]
         public string Location { get; set; }
 
         [Required]
-        [Display(Name = "Group")]
-        public string Group { get; set; }
-
-        [Required]
         [Display(Name = "Type")]
         public string Type { get; set; }
+        public IEnumerable<System.Web.Mvc.SelectListItem> TypeList { get; set; }
 
         [Display(Name = "Description")]
         public string Description { get; set; }
 
+        [Display(Name = "Additional Info")]
+        public string AdditionalInfo { get; set; }
+        
+        [FileExtensions(Extensions=".jpg",ErrorMessage="File must be .jpg")]
         [Display(Name = "Logo")]
-        public string Logo_Path { get; set; }
+        public string LogoPath { get; set; }
 
 
 
