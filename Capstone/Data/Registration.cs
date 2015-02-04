@@ -12,10 +12,10 @@ namespace Capstone.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Food
+    public partial class Registration
     {
         public int Id { get; set; }
-        public string Food1 { get; set; }
         public int User_ID { get; set; }
+        public int Event_ID { get; set; }
     }
 }

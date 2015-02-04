@@ -29,7 +29,6 @@ namespace Capstone.Data
         public string PhoneOffice { get; set; }
         public string CompanyName { get; set; }
         public string BranchLocation { get; set; }
-        public Nullable<System.Guid> Food_ID { get; set; }
         public string AdditionalInfo { get; set; }
     }
 }

@@ -13,10 +13,10 @@ namespace Capstone.Data
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Entities : DbContext
+    public partial class Entities2 : DbContext
     {
-        public Entities()
-            : base("name=Entities")
+        public Entities2()
+            : base("name=Entities2")
         {
         }
     
@@ -25,7 +25,11 @@ namespace Capstone.Data
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Food> Foods { get; set; }
+        public virtual DbSet<Registration> Registrations { get; set; }
+        public virtual DbSet<Type> Types { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }
 }

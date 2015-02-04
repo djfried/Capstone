@@ -14,6 +14,7 @@ namespace Capstone.Models
         // Used to have an object that contains a single user to pass between view and model
         // Used for CreateUser, UpdateUser, GetUser
         public User User { get; set; }
+        public List<Food> Foods { get; set; }
 
     }
 }

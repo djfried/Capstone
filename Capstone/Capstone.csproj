@@ -172,7 +172,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Container_Classes\Category.cs" />
     <Compile Include="Container_Classes\Event.cs" />
+    <Compile Include="Container_Classes\Food.cs" />
+    <Compile Include="Container_Classes\Type.cs" />
     <Compile Include="Container_Classes\User.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EventController.cs" />
@@ -180,26 +183,45 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Core\IRepository.cs" />
     <Compile Include="Core\Repository.cs" />
+    <Compile Include="Data\Category.cs">
+      <DependentUpon>Database.tt</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Data\Database.Context.cs">
+      <DependentUpon>Database.Context.tt</DependentUpon>
+      <SubType>Code</SubType>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Data\Database.cs">
+      <DependentUpon>Database.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Data\Database.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Database.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Event.cs">
+      <DependentUpon>Database.tt</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Data\Food.cs">
-      <DependentUpon>TestingTables.tt</DependentUpon>
+      <DependentUpon>Database.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\TestingTables.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TestingTables.Context.tt</DependentUpon>
+    <Compile Include="Data\Registration.cs">
+      <DependentUpon>Database.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\TestingTables.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TestingTables.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\TestingTables.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TestingTables.edmx</DependentUpon>
+    <Compile Include="Data\Type.cs">
+      <DependentUpon>Database.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\User.cs">
-      <DependentUpon>TestingTables.tt</DependentUpon>
+      <DependentUpon>Database.tt</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -219,29 +241,29 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Data\Database.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Database.Context.cs</LastGenOutput>
+      <DependentUpon>Database.edmx</DependentUpon>
+    </Content>
+    <Content Include="Data\Database.edmx.diagram">
+      <DependentUpon>Database.edmx</DependentUpon>
+    </Content>
+    <Content Include="Data\Database.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Database.cs</LastGenOutput>
+      <DependentUpon>Database.edmx</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Data\TestingTables.edmx">
+    <EntityDeploy Include="Data\Database.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>TestingTables.Designer.cs</LastGenOutput>
+      <LastGenOutput>Database.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Data\TestingTables.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TestingTables.edmx</DependentUpon>
-      <LastGenOutput>TestingTables.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Data\TestingTables.edmx.diagram">
-      <DependentUpon>TestingTables.edmx</DependentUpon>
-    </Content>
-    <Content Include="Data\TestingTables.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TestingTables.edmx</DependentUpon>
-      <LastGenOutput>TestingTables.cs</LastGenOutput>
-    </Content>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
