@@ -42,5 +42,17 @@ namespace Capstone.Container_Classes
 
             return dataFoods;
         }
+
+        public static List<Data.Food> DatabaseToDataFoods(IEnumerable<Data.Food> source)
+        {
+            List<Data.Food> dataFoods = new List<Data.Food>();
+
+            foreach (Data.Food dbFood in source)
+            {
+                dataFoods.Add(dbFood);
+            }
+
+            return dataFoods;
+        }
     }
 }

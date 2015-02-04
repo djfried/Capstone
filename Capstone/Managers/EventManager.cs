@@ -79,7 +79,7 @@ namespace Capstone.Managers
 
             // Second the categories will be deleted and updated
             // first we delete
-            List<Data.Category> dataCategories = DatabaseToDataCategories(_repository.GetAll<Data.Category>(x => x.Event_ID == UpdatedEvent.ID));
+            List<Data.Category> dataCategories = Container_Classes.Category.DatabaseToDataCategories(_repository.GetAll<Data.Category>(x => x.Event_ID == UpdatedEvent.ID));
             foreach (Data.Category dataCategory in dataCategories)
             {
                 _repository.Delete<Data.Category>(dataCategory);
@@ -97,7 +97,7 @@ namespace Capstone.Managers
 
             // Third the types will be deleted and updated
             // first we delete the old
-            List<Data.Type> dataTypes = DatabaseToDataTypes(_repository.GetAll<Data.Type>(x => x.Event_ID == UpdatedEvent.ID));
+            List<Data.Type> dataTypes = Container_Classes.Type.DatabaseToDataTypes(_repository.GetAll<Data.Type>(x => x.Event_ID == UpdatedEvent.ID));
             foreach (Data.Type dataType in dataTypes)
             {
                 _repository.Delete<Data.Type>(dataType);
@@ -171,7 +171,7 @@ namespace Capstone.Managers
         public EventsViewModels GetEventsCreatedByUser(Container_Classes.User containerUser)
         {
             // Find the events that are being moderated by this user's ID
-            List<Data.Event> dataEvents = DatabaseToDataEvent(_repository.GetAll<Data.Event>(x => x.Owner_ID == containerUser.ID));
+            List<Data.Event> dataEvents = Container_Classes.Event.DatabaseToDataEvent(_repository.GetAll<Data.Event>(x => x.Owner_ID == containerUser.ID));
 
             // Transform these events into a list of container objects
             List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
@@ -187,30 +187,6 @@ namespace Capstone.Managers
             return model;
         }
 
-        public List<Data.Category> DatabaseToDataCategories(IEnumerable<Data.Category> source)
-        {
-            List<Data.Category> dataCategories = new List<Data.Category>();
-
-            foreach (Data.Category dataCategory in source)
-            {
-                dataCategories.Add(dataCategory);
-            }
-
-            return dataCategories;
-        }
-
-        public List<Data.Type> DatabaseToDataTypes(IEnumerable<Data.Type> source)
-        {
-            List<Data.Type> dataTypes = new List<Data.Type>();
-
-            foreach (Data.Type dataType in source)
-            {
-                dataTypes.Add(dataType);
-            }
-
-            return dataTypes;
-        }
-
         public List<Data.Registration> DatabaseToDataRegistration(IEnumerable<Data.Registration> source)
         {
             List<Data.Registration> dataRegistrations = new List<Data.Registration>();
@@ -221,18 +197,6 @@ namespace Capstone.Managers
             }
 
             return dataRegistrations;
-        }
-
-        public List<Data.Event> DatabaseToDataEvent(IEnumerable<Data.Event> source)
-        {
-            List<Data.Event> dataEvents = new List<Data.Event>();
-
-            foreach (Data.Event dataEvent in source)
-            {
-                dataEvents.Add(dataEvent);
-            }
-
-            return dataEvents;
         }
     }
 }

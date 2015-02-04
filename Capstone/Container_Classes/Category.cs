@@ -52,5 +52,17 @@ namespace Capstone.Container_Classes
 
             return dataCategories;
         }
+
+        public static List<Data.Category> DatabaseToDataCategories(IEnumerable<Data.Category> source)
+        {
+            List<Data.Category> dataCategories = new List<Data.Category>();
+
+            foreach (Data.Category dataCategory in source)
+            {
+                dataCategories.Add(dataCategory);
+            }
+
+            return dataCategories;
+        }
     }
 }

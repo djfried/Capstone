@@ -71,5 +71,17 @@ namespace Capstone.Container_Classes
 
             return dataEvent;
         }
+
+        public static List<Data.Event> DatabaseToDataEvent(IEnumerable<Data.Event> source)
+        {
+            List<Data.Event> dataEvents = new List<Data.Event>();
+
+            foreach (Data.Event dataEvent in source)
+            {
+                dataEvents.Add(dataEvent);
+            }
+
+            return dataEvents;
+        }
     }
 }

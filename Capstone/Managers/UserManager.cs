@@ -53,7 +53,7 @@ namespace Capstone.Managers
             _repository.SaveChanges();
 
             // Get the foods from the database to give back to the view
-            List<Data.Food> dbFoods = DatabaseToDataFoods(_repository.GetAll<Data.Food>(x => x.User_ID == dUser.Id));
+            List<Data.Food> dbFoods = Container_Classes.Food.DatabaseToDataFoods(_repository.GetAll<Data.Food>(x => x.User_ID == dUser.Id));
             List<Container_Classes.Food> containerFoods = Container_Classes.Food.DataFoodsToContainerFoods(dbFoods);
 
             // Create the model to return the information to the view.
@@ -83,7 +83,7 @@ namespace Capstone.Managers
             }
 
             // Clear the user's food if there are any
-            List<Data.Food> dbFoods = DatabaseToDataFoods(_repository.GetAll<Data.Food>(x => x.User_ID == addedDataUser.Id));
+            List<Data.Food> dbFoods = Container_Classes.Food.DatabaseToDataFoods(_repository.GetAll<Data.Food>(x => x.User_ID == addedDataUser.Id));
             foreach (Data.Food dataFood in dbFoods)
             {
                 _repository.Delete<Data.Food>(dataFood);
@@ -121,7 +121,7 @@ namespace Capstone.Managers
                 return null;
             }
             // Get the foods from the database associated with the user
-            List<Data.Food> dataFoods = DatabaseToDataFoods(_repository.GetAll<Data.Food>(x => x.User_ID == UserID));
+            List<Data.Food> dataFoods = Container_Classes.Food.DatabaseToDataFoods(_repository.GetAll<Data.Food>(x => x.User_ID == UserID));
             List<Container_Classes.Food> containerFoods = Container_Classes.Food.DataFoodsToContainerFoods(dataFoods);
 
             // Combine the foods and user information for the database for the user object
@@ -167,18 +167,6 @@ namespace Capstone.Managers
             model.Users = containerUsers;
 
             return model;
-        }
-
-        public List<Data.Food> DatabaseToDataFoods(IEnumerable<Data.Food> source)
-        {
-            List<Data.Food> dataFoods = new List<Data.Food>();
-
-            foreach (Data.Food dbFood in source)
-            {
-                dataFoods.Add(dbFood);
-            }
-
-            return dataFoods;
         }
 
         public List<Data.Registration> DatabaseToDataRegistration(IEnumerable<Data.Registration> source)
