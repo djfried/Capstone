@@ -1,9 +1,15 @@
-﻿using Capstone.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Globalization;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using Capstone.Models;
+using Capstone.Managers;
 
 namespace Capstone.Controllers
 {
@@ -24,6 +30,19 @@ namespace Capstone.Controllers
                     new SelectListItem { Value = "5", Text = "Other" }
                 };
             return View(vm);
+        }
+        
+         //post: /event/createEvent
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateEvent(CreateEventViewModel model)
+        {
+            
+           if(ModelState.IsValid)
+               return RedirectToAction("Events", "Home");
+             
+            return View(model);
         }
     }
 }

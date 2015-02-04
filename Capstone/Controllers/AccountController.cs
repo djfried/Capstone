@@ -139,16 +139,17 @@ namespace Capstone.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            var vm = new RegisterViewModel();
+            var model = new RegisterViewModel();
 
-            vm.Food = new[]
+            model.Food = new[]
                 {
                     new SelectListItem { Value = "1", Text = "No Preference" },
                     new SelectListItem { Value = "2", Text = "Vegitarian" },
                     new SelectListItem { Value = "3", Text = "Vegan" }
                 };
-            return View(vm);
+            return View(model);
         }
+
 
         //
         // POST: /Account/Register
@@ -173,7 +174,7 @@ namespace Capstone.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-                AddErrors(result);
+                //AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
