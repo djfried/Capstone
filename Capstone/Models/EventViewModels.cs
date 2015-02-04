@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using Capstone.Container_Classes;
 
+
 namespace Capstone.Models
 {
     public class EventViewModels

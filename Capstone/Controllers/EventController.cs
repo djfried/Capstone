@@ -9,7 +9,7 @@ namespace Capstone.Controllers
     public class EventController : Controller
     {
         // GET: Event
-        public ActionResult Create()
+        public ActionResult CreateEvent()
         {
             return View();
         }
