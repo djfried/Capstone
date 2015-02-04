@@ -24,7 +24,7 @@ namespace Capstone.Managers
         public UserViewModels CreateUser(Container_Classes.User NewUser)
         {
             // Ensure that the User does not already exist in the database.
-            if (_repository.Get<Data.User>(x => x.Username == NewUser.Username) == null)
+            if (_repository.Get<Data.User>(x => x.Username == NewUser.Username) != null)
             {
                 // The user is in the database, this should be a special error. 
                 return null;

@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Capstone.Models;
+using Capstone.Container_Classes;
+using Capstone.Managers;
 
 namespace Capstone.Controllers
 {
@@ -160,6 +162,34 @@ namespace Capstone.Controllers
         {
             if (ModelState.IsValid)
             {
+                // DANS CODE TRYING TO SEND TO DATABASE
+
+                UserManager userManager = new UserManager();
+
+                User containerUser = new User();
+                containerUser.AdditionalInfo = model.AdditionalInfo;
+                containerUser.Address1 = model.Address1;
+                containerUser.Address2 = model.Address2;
+                containerUser.BranchLocation = model.Branch;
+                containerUser.City = model.City;
+                containerUser.CompanyName = model.CompanyName;
+                containerUser.FirstName = model.FirstName;
+                containerUser.Foods = model.FoodPreference;
+                //containerUser.ID
+                containerUser.LastName = model.LastName;
+                containerUser.Password = model.Password;
+                containerUser.PhoneCell = model.CellPhone;
+                containerUser.PhoneHome = model.HomePhone;
+                containerUser.PhoneOffice = model.OfficePhone;
+                containerUser.State = model.State;
+                containerUser.Username = model.Email;
+                containerUser.Zip = model.Zip;
+
+                Capstone.Models.UserViewModels userModel = userManager.CreateUser(containerUser);
+                return RedirectToAction("Index", "Home");
+
+                // END OF DAN'S CODE
+
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
