@@ -14,8 +14,14 @@ namespace Capstone.Data
     
     public partial class Category
     {
-        public int Id { get; set; }
+        public Category()
+        {
+            this.Events = new HashSet<Event>();
+        }
+    
+        public int CategoryID { get; set; }
         public string Category1 { get; set; }
-        public int Event_ID { get; set; }
+    
+        public virtual ICollection<Event> Events { get; set; }
     }
 }

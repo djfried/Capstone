@@ -16,7 +16,7 @@ namespace Capstone.Managers
     public class UserManager
     {
 
-        private static Entities2 _entities = new Entities2();
+        private static CapstoneEntities _entities = new CapstoneEntities();
         private IRepository _repository = new Repository(_entities);
 
         // Once the controller has passed the User info and foods list it can be inserted into the database
@@ -29,8 +29,17 @@ namespace Capstone.Managers
                 // The user is in the database, this should be a special error. 
                 return null;
             }
+
+            // Find out the food id that the user provided and get the ID number for the database entry.
+            Data.Food userFood = _repository.Get<Data.Food>(x => x.Food1.Equals(NewUser.Foods));
+            if (userFood == null)
+            {
+                // Food requested was not in the database!
+                return null;
+            }
+
             // Add the new user to the database.
-            Data.User dUser = Container_Classes.User.UserToDataUser(NewUser);
+            Data.User dUser = Container_Classes.User.UserToDataUser(NewUser, userFood.FoodID);
             _repository.Add<Data.User>(dUser);
 
             // Get the inserted NewUser back from the database
@@ -41,24 +50,11 @@ namespace Capstone.Managers
                 return UserNotFound();
             }
 
-            // Inserting the foods into the seperate table
-            foreach (Container_Classes.Food food in NewUser.Foods)
-            {
-                Data.Food dFood = new Data.Food();
-                dFood.Food1 = food.FoodString;
-                dFood.User_ID = dUser.Id;
-                _repository.Add<Data.Food>(dFood);
-            }
-
             _repository.SaveChanges();
-
-            // Get the foods from the database to give back to the view
-            List<Data.Food> dbFoods = Container_Classes.Food.DatabaseToDataFoods(_repository.GetAll<Data.Food>(x => x.User_ID == dUser.Id));
-            List<Container_Classes.Food> containerFoods = Container_Classes.Food.DataFoodsToContainerFoods(dbFoods);
 
             // Create the model to return the information to the view.
             UserViewModels model = new UserViewModels();
-            model.User = Container_Classes.User.DataUserToUser(dUser, containerFoods);
+            model.User = NewUser;
 
             return model;
         }
@@ -72,7 +68,15 @@ namespace Capstone.Managers
                 return UserNotFound();
             }
 
-            Data.User dUser = Container_Classes.User.UserToDataUser(UpdatedUser);
+            // Get the food ID from the database to store in the user object
+            Data.Food dataFood = _repository.Get<Data.Food>(x => x.Food1.Equals(UpdatedUser.Foods));
+            if (dataFood == null)
+            {
+                // The food ID wasn't found
+                return null;
+            }
+
+            Data.User dUser = Container_Classes.User.UserToDataUser(UpdatedUser, dataFood.FoodID);
             _repository.Update<Data.User>(dUser);
 
             Data.User addedDataUser = _repository.Get<Data.User>(x => x.Username == UpdatedUser.Username);
@@ -80,23 +84,6 @@ namespace Capstone.Managers
             {
                 // The user should have been inserted into the database, but they were not. (Or failed during insertion)
                 return UserNotFound();
-            }
-
-            // Clear the user's food if there are any
-            List<Data.Food> dbFoods = Container_Classes.Food.DatabaseToDataFoods(_repository.GetAll<Data.Food>(x => x.User_ID == addedDataUser.Id));
-            foreach (Data.Food dataFood in dbFoods)
-            {
-                _repository.Delete<Data.Food>(dataFood);
-            }
-
-            // Insert the user's foods if they have any
-            dbFoods = Container_Classes.Food.ContainerFoodsToDataFoods(UpdatedUser.Foods);
-            foreach (Data.Food dataFood in dbFoods)
-            {
-                // Tag the ID with the foods to be inserted
-                dataFood.User_ID = addedDataUser.Id;
-                // Insert the foods
-                _repository.Add<Data.Food>(dataFood);
             }
 
             _repository.SaveChanges();
@@ -113,19 +100,27 @@ namespace Capstone.Managers
         public UserViewModels GetUserByID(int UserID)
         {
             // Attempt to find the user through the requested username.
-            Data.User dUser = _repository.Get<Data.User>(x => x.Id == UserID);
+            Data.User dUser = _repository.Get<Data.User>(x => x.UserID == UserID);
+
             // Ensure that we actually found someone through the username.
             if (dUser == null)
             {
                 // We did not find anyone by the provided username in the database.
                 return UserNotFound();
             }
-            // Get the foods from the database associated with the user
-            List<Data.Food> dataFoods = Container_Classes.Food.DatabaseToDataFoods(_repository.GetAll<Data.Food>(x => x.User_ID == UserID));
-            List<Container_Classes.Food> containerFoods = Container_Classes.Food.DataFoodsToContainerFoods(dataFoods);
+
+            // Get the User's food preference from the database
+            Data.Food dataFood = _repository.Get<Data.Food>(x => x.FoodID == dUser.Food_ID);
+
+            // Ensure that we found a valid food preference
+            if (dataFood == null)
+            {
+                // The food wasn't found
+                return null;
+            }
 
             // Combine the foods and user information for the database for the user object
-            Container_Classes.User containerUser = Container_Classes.User.DataUserToUser(dUser, containerFoods);
+            Container_Classes.User containerUser = Container_Classes.User.DataUserToUser(dUser, dataFood.Food1);
 
             // Create the model to return the information to the view.
             UserViewModels model = new UserViewModels();
@@ -153,14 +148,17 @@ namespace Capstone.Managers
 
             foreach (int userID in dataUsersID)
             {
-                dataUsers.Add(_repository.Get<Data.User>(x => x.Id == userID));
+                dataUsers.Add(_repository.Get<Data.User>(x => x.UserID == userID));
             }
 
             // Convert the data.users to usable user objects
             List<Container_Classes.User> containerUsers = new List<Container_Classes.User>();
+            // Have an data object to fetch the User's food preference
+            Data.Food dataFood;
             foreach (Data.User dataUser in dataUsers)
             {
-                containerUsers.Add(Container_Classes.User.DataUserToUser(dataUser));
+                dataFood = _repository.Get<Data.Food>(x => x.FoodID == dataUser.Food_ID);
+                containerUsers.Add(Container_Classes.User.DataUserToUser(dataUser, dataFood.Food1));
             }
 
             UsersViewModels model = new UsersViewModels();
@@ -172,9 +170,17 @@ namespace Capstone.Managers
         // Returns the view of all of the events the user is registered for. 
         public EventsViewModels RegisterUserForEvent(Container_Classes.Event containerEvent, Container_Classes.User containerUser)
         {
+            // Get the food ID from the database using the containerUser object
+            Data.Food dataFood = _repository.Get<Data.Food>(x => x.Food1.Equals(containerUser.Foods));
+            // Ensure that we found the food in the database
+            if (dataFood == null)
+            {
+                return null;
+            }
+
             // Ensure that the user exists in the database
-            Data.User dataUser = Container_Classes.User.UserToDataUser(containerUser);
-            dataUser = _repository.Get<Data.User>(x => x.Id == dataUser.Id);
+            Data.User dataUser = Container_Classes.User.UserToDataUser(containerUser, dataFood.FoodID);
+            dataUser = _repository.Get<Data.User>(x => x.UserID == dataUser.UserID);
             
             if (dataUser == null)
             {
@@ -182,9 +188,24 @@ namespace Capstone.Managers
                 return null;
             }
 
+            // Grab the Category and type from the database so we can read an event from the database
+            Data.Category dataCategory = _repository.Get<Data.Category>(x => x.Category1.Equals(containerEvent.Category));
+            if (dataCategory == null)
+            {
+                // We could not find the category in the database
+                return null;
+            }
+
+            Data.Type dataType = _repository.Get<Data.Type>(x => x.Type1.Equals(containerEvent.Type));
+            if (dataType == null)
+            {
+                // We could not find the type in the database
+                return null;
+            }
+
             // Ensure that the event exists in the database
-            Data.Event dataEvent = Container_Classes.Event.ContainerEventToDataEvent(containerEvent);
-            dataEvent = _repository.Get<Data.Event>(x => x.Id == dataEvent.Id);
+            Data.Event dataEvent = Container_Classes.Event.ContainerEventToDataEvent(containerEvent, dataCategory.CategoryID, dataType.TypeID, dataUser.UserID);
+            dataEvent = _repository.Get<Data.Event>(x => x.EventID== dataEvent.EventID);
 
             if (dataEvent == null)
             {
@@ -194,8 +215,8 @@ namespace Capstone.Managers
 
             // Prepare the information to be updated in the database
             Data.Registration registration = new Data.Registration();
-            registration.User_ID = dataUser.Id;
-            registration.Event_ID = dataEvent.Id;
+            registration.User_ID = dataUser.UserID;
+            registration.Event_ID = dataEvent.EventID;
 
             // Add the registration to the database
             _repository.Add<Data.Registration>(registration);
@@ -203,20 +224,22 @@ namespace Capstone.Managers
             _repository.SaveChanges();
 
             // Get all of the users registered events
-            List<Data.Registration> registrations = DatabaseToDataRegistration(_repository.GetAll<Data.Registration>(x => x.User_ID == dataUser.Id));
+            List<Data.Registration> registrations = DatabaseToDataRegistration(_repository.GetAll<Data.Registration>(x => x.User_ID == dataUser.UserID));
             List<Data.Event> dataEvents = new List<Data.Event>();
 
             // Create a list of all events this user is attending
             foreach(Data.Registration dataRegistration in registrations)
             {
-                dataEvents.Add(_repository.Get<Data.Event>(x => x.Id == dataRegistration.Event_ID));
+                dataEvents.Add(_repository.Get<Data.Event>(x => x.EventID == dataRegistration.Event_ID));
             }
 
             // Conver the list of dataEvents to containerEvents
             List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
             foreach(Data.Event dataEvent2 in dataEvents)
             {
-                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent2));
+                dataType = _repository.Get<Data.Type>(x => x.TypeID == dataEvent2.Type_ID);
+                dataCategory = _repository.Get<Data.Category>(x => x.CategoryID == dataEvent2.Category_ID);
+                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent2, dataUser.UserID, dataCategory.Category1, dataType.Type1));
             }
 
             EventsViewModels model = new EventsViewModels();
@@ -234,7 +257,7 @@ namespace Capstone.Managers
                 return null;
             }
             // Convert our fake user to something the view can use
-            Container_Classes.User containerUser = Container_Classes.User.DataUserToUser(dataUser);
+            Container_Classes.User containerUser = Container_Classes.User.DataUserToUser(dataUser, "NOTFOUND");
 
             UserViewModels model = new UserViewModels();
             model.User = containerUser;

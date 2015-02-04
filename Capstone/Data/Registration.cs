@@ -14,8 +14,11 @@ namespace Capstone.Data
     
     public partial class Registration
     {
-        public int Id { get; set; }
+        public int RegistrationsID { get; set; }
         public int User_ID { get; set; }
         public int Event_ID { get; set; }
+    
+        public virtual Event Event { get; set; }
+        public virtual User User { get; set; }
     }
 }

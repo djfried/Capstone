@@ -17,41 +17,33 @@ namespace Capstone.Managers
     public class EventManager
     {
         // Entities will be the connection to the database. 
-        private static Entities2 _entities = new Entities2();
+        private static CapstoneEntities _entities = new CapstoneEntities();
         private IRepository _repository = new Repository(_entities);
 
         public EventViewModels CreateEvent(Container_Classes.Event NewEvent)
         {
+            // Convert the type string and category string to database keys
+            Data.Type dataType = _repository.Get<Data.Type>(x => x.Type1.Equals(NewEvent.Type));
+            if(dataType == null){
+                // Could not map type to the database
+                return null;
+            }
+
+            Data.Category dataCategory = _repository.Get<Data.Category>(x => x.Category1.Equals(NewEvent.Category));
+            if(dataCategory == null){
+                // Could not mape category string to the database.
+                return null;
+            }
+
             // Convert the Container Event into a Data Event so it can be added to the database
-            Data.Event dataEvent = Container_Classes.Event.ContainerEventToDataEvent(NewEvent);
+            Data.Event dataEvent = Container_Classes.Event.ContainerEventToDataEvent(NewEvent, NewEvent.Owner_ID, dataType.TypeID, dataCategory.CategoryID);
             _repository.Add<Data.Event>(dataEvent);
 
             // Weak way of getting new event, this should break if two events have the same name!
             dataEvent = _repository.Get<Data.Event>(x => x.Title == NewEvent.Title);
             
             // Assign the ID to the added container object event
-            NewEvent.ID = dataEvent.Id;
-
-            // Now we must add the types and categories to the database.
-            // First the categories will be inserted to the database
-            List<Data.Category> dataCategories = Container_Classes.Category.ContainerCategoriesToDataCategories(NewEvent.Categories);
-            dataCategories = Container_Classes.Category.AddEventIDToDataCategories(dataCategories, dataEvent.Id);
-
-            // Insert all of the categories into the database
-            foreach (Data.Category dataCategory in dataCategories)
-            {
-                _repository.Add<Data.Category>(dataCategory);
-            }
-
-            // Second the types will be inserted to the database.
-            List<Data.Type> dataTypes = Container_Classes.Type.ContainerTypeToDataType(NewEvent.Types);
-            dataTypes = Container_Classes.Type.AddEventIDToDataTypes(dataTypes, dataEvent.Id);
-
-            // Insert all of the types into the database
-            foreach (Data.Type dataType in dataTypes)
-            {
-                _repository.Add<Data.Type>(dataType);
-            }
+            NewEvent.ID = dataEvent.EventID;
 
             _repository.SaveChanges();
 
@@ -64,53 +56,32 @@ namespace Capstone.Managers
         public EventViewModels UpdateEvent(Container_Classes.Event UpdatedEvent)
         {
             // Retreieve the existing event from the data to update it.
-            Data.Event dataEvent = _repository.Get<Data.Event>(x => x.Id == UpdatedEvent.ID);
+            Data.Event dataEvent = _repository.Get<Data.Event>(x => x.EventID == UpdatedEvent.ID);
             if (dataEvent == null)
             {
                 // The event does not exist in the database.
                 return EventNotFound();
             }
 
+            // Convert the type string and category string to database keys
+            Data.Type dataType = _repository.Get<Data.Type>(x => x.Type1.Equals(UpdatedEvent.Type));
+            if (dataType == null)
+            {
+                // Could not map type to the database
+                return null;
+            }
+
+            Data.Category dataCategory = _repository.Get<Data.Category>(x => x.Category1.Equals(UpdatedEvent.Category));
+            if (dataCategory == null)
+            {
+                // Could not mape category string to the database.
+                return null;
+            }
+
             // The event exists and we have it stored as data event. Let's update it.
             // First the event table will be updated
-            dataEvent = Container_Classes.Event.ContainerEventToDataEvent(UpdatedEvent);
+            dataEvent = Container_Classes.Event.ContainerEventToDataEvent(UpdatedEvent, UpdatedEvent.Owner_ID, dataType.TypeID, dataCategory.CategoryID);
             _repository.Update<Data.Event>(dataEvent);
-
-
-            // Second the categories will be deleted and updated
-            // first we delete
-            List<Data.Category> dataCategories = Container_Classes.Category.DatabaseToDataCategories(_repository.GetAll<Data.Category>(x => x.Event_ID == UpdatedEvent.ID));
-            foreach (Data.Category dataCategory in dataCategories)
-            {
-                _repository.Delete<Data.Category>(dataCategory);
-            }
-
-            // and then we update (or add in this case)
-            dataCategories = Container_Classes.Category.ContainerCategoriesToDataCategories(UpdatedEvent.Categories);
-            dataCategories = Container_Classes.Category.AddEventIDToDataCategories(dataCategories, UpdatedEvent.ID);
-
-            foreach (Data.Category dataCategory in dataCategories)
-            {
-                _repository.Add<Data.Category>(dataCategory);
-            }
-
-
-            // Third the types will be deleted and updated
-            // first we delete the old
-            List<Data.Type> dataTypes = Container_Classes.Type.DatabaseToDataTypes(_repository.GetAll<Data.Type>(x => x.Event_ID == UpdatedEvent.ID));
-            foreach (Data.Type dataType in dataTypes)
-            {
-                _repository.Delete<Data.Type>(dataType);
-            }
-
-            // and then we update (or add in this case)
-            dataTypes = Container_Classes.Type.ContainerTypeToDataType(UpdatedEvent.Types);
-            dataTypes = Container_Classes.Type.AddEventIDToDataTypes(dataTypes, UpdatedEvent.ID);
-
-            foreach (Data.Type dataType in dataTypes)
-            {
-                _repository.Add<Data.Type>(dataType);
-            }
 
             _repository.SaveChanges();
 
@@ -122,7 +93,7 @@ namespace Capstone.Managers
 
         public EventViewModels CancelEvent(Container_Classes.Event containerEvent)
         {
-            Data.Event dataEvent = _repository.Get<Data.Event>(x => x.Id == containerEvent.ID);
+            Data.Event dataEvent = _repository.Get<Data.Event>(x => x.EventID == containerEvent.ID);
             if (dataEvent == null)
             {
                 // We did not find the event to cancel through the id
@@ -149,11 +120,15 @@ namespace Capstone.Managers
             // Grab all events that the user would be able to sign up for.
             List<Data.Event> dataEvents = Container_Classes.Event.DatabaseToDataEvent(_repository.GetAll<Data.Event>(x => x.Status.Equals("ACTIVE", StringComparison.Ordinal)));
             List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
+            Data.Type dataType;
+            Data.Category dataCategory;
 
             // Put the events into the container classes.
             foreach (Data.Event dataEvent in dataEvents)
             {
-                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent));
+                dataType = _repository.Get<Data.Type>(x => x.TypeID == dataEvent.Type_ID);
+                dataCategory = _repository.Get<Data.Category>(x => x.CategoryID == dataEvent.Category_ID);
+                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent, dataEvent.Owner_ID, dataCategory.Category1, dataType.Type1));
             }
 
             EventsViewModels model = new EventsViewModels();
@@ -172,13 +147,18 @@ namespace Capstone.Managers
 
             foreach (Data.Registration dataRegistration in dataRegistrations)
             {
-                dataEvents.Add(_repository.Get<Data.Event>(x => x.Id == dataRegistration.Event_ID));
+                dataEvents.Add(_repository.Get<Data.Event>(x => x.EventID == dataRegistration.Event_ID));
             }
 
             List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
+            Data.Type dataType;
+            Data.Category dataCategory;
+            
             foreach (Data.Event dataEvent in dataEvents)
             {
-                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent));
+                dataType = _repository.Get<Data.Type>(x => x.TypeID == dataEvent.Type_ID);
+                dataCategory = _repository.Get<Data.Category>(x => x.CategoryID == dataEvent.Category_ID);
+                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent, dataEvent.Owner_ID, dataCategory.Category1, dataType.Type1));
             }
 
             EventsViewModels model = new EventsViewModels();
@@ -194,10 +174,14 @@ namespace Capstone.Managers
 
             // Transform these events into a list of container objects
             List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
+            Data.Type dataType;
+            Data.Category dataCategory;
 
             foreach (Data.Event dataEvent in dataEvents)
             {
-                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent));
+                dataType = _repository.Get<Data.Type>(x => x.TypeID == dataEvent.Type_ID);
+                dataCategory = _repository.Get<Data.Category>(x => x.CategoryID == dataEvent.Category_ID);
+                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent, dataEvent.Owner_ID, dataCategory.Category1, dataType.Type1));
             }
 
             EventsViewModels model = new EventsViewModels();
@@ -215,7 +199,7 @@ namespace Capstone.Managers
                 // We can't even find the fake event!
                 return null;
             }
-            Container_Classes.Event containerEvent = Container_Classes.Event.DataEventToContainerEvent(dataEvent);
+            Container_Classes.Event containerEvent = Container_Classes.Event.DataEventToContainerEvent(dataEvent, 0, "NOTFOUND", "NOTFOUND");
 
             EventViewModels model = new EventViewModels();
             model.Event = containerEvent;

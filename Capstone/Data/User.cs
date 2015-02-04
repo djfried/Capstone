@@ -14,7 +14,13 @@ namespace Capstone.Data
     
     public partial class User
     {
-        public int Id { get; set; }
+        public User()
+        {
+            this.Events = new HashSet<Event>();
+            this.Registrations = new HashSet<Registration>();
+        }
+    
+        public int UserID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string FirstName { get; set; }
@@ -29,6 +35,11 @@ namespace Capstone.Data
         public string PhoneOffice { get; set; }
         public string CompanyName { get; set; }
         public string BranchLocation { get; set; }
+        public int Food_ID { get; set; }
         public string AdditionalInfo { get; set; }
+    
+        public virtual ICollection<Event> Events { get; set; }
+        public virtual Food Food { get; set; }
+        public virtual ICollection<Registration> Registrations { get; set; }
     }
 }
