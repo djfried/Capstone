@@ -64,10 +64,6 @@ namespace Capstone.Models
 
     public class RegisterViewModel
     {
-        [Required]
-        [Display(Name="Date")]
-        [DataType(DataType.Date)]
-        public string date { get; set; }
 
         [Required]
         [EmailAddress]
@@ -116,16 +112,17 @@ namespace Capstone.Models
         public string Zip { get; set; }
 
         [Required]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
         [Display(Name = "Home Phone")]
-        [Phone]
+       
         public string HomePhone { get; set; }
 
         [Display(Name = "Cell Phone")]
-        [Phone]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
         public string CellPhone { get; set; }
 
         [Display(Name = "Office Phone")]
-        [Phone]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
         public string OfficePhone { get; set; }
 
         [Required]

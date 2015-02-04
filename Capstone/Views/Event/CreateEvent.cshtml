@@ -48,7 +48,17 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Type, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.Type, new SelectList(Model.TypeList, "Value", "Text"), new { @class = "form-control" })
+            @{
+            var TypeList = new[]
+                {
+                    new SelectListItem { Value = "1", Text = "Seminar" },
+                    new SelectListItem { Value = "2", Text = "Meeting" },
+                    new SelectListItem { Value = "3", Text = "Training" },
+                    new SelectListItem { Value = "4", Text = "Social" },
+                    new SelectListItem { Value = "5", Text = "Other" }
+                };
+            }
+            @Html.DropDownListFor(m => m.Type, TypeList, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Type, "", new { @class = "text-danger" })
         </div>
     </div>

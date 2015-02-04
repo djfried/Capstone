@@ -121,7 +121,15 @@
     <div class="form-group">
         @Html.LabelFor(m => m.FoodPreference, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.DropDownListFor(m => m.FoodPreference, new SelectList(Model.Food, "Value", "Text"), new { @class = "form-control" })
+            @{
+                var FoodList = new[]
+                {
+                    new SelectListItem { Value = "1", Text = "No Preference" },
+                    new SelectListItem { Value = "2", Text = "Vegetarian" },
+                    new SelectListItem { Value = "3", Text = "Vegan" }
+                };
+            }
+            @Html.DropDownListFor(m => m.FoodPreference, FoodList, new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">

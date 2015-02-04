@@ -19,17 +19,17 @@ namespace Capstone.Controllers
         public ActionResult CreateEvent()
         {
 
-            var vm = new CreateEventViewModel();
+            
 
-            vm.TypeList = new[]
-                {
-                    new SelectListItem { Value = "1", Text = "Seminar" },
-                    new SelectListItem { Value = "2", Text = "Meeting" },
-                    new SelectListItem { Value = "3", Text = "Training" },
-                    new SelectListItem { Value = "4", Text = "Social" },
-                    new SelectListItem { Value = "5", Text = "Other" }
-                };
-            return View(vm);
+            //ViewBag.TypeList = new[]
+            //    {
+            //        new SelectListItem { Value = "1", Text = "Seminar" },
+            //        new SelectListItem { Value = "2", Text = "Meeting" },
+            //        new SelectListItem { Value = "3", Text = "Training" },
+            //        new SelectListItem { Value = "4", Text = "Social" },
+            //        new SelectListItem { Value = "5", Text = "Other" }
+            //    };
+            return View();
         }
         
          //post: /event/createEvent

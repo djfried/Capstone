@@ -139,15 +139,15 @@ namespace Capstone.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            var model = new RegisterViewModel();
+            //var model = new RegisterViewModel();
 
-            model.Food = new[]
-                {
-                    new SelectListItem { Value = "1", Text = "No Preference" },
-                    new SelectListItem { Value = "2", Text = "Vegitarian" },
-                    new SelectListItem { Value = "3", Text = "Vegan" }
-                };
-            return View(model);
+            //model.Food = new[]
+            //    {
+            //        new SelectListItem { Value = "1", Text = "No Preference" },
+            //        new SelectListItem { Value = "2", Text = "Vegitarian" },
+            //        new SelectListItem { Value = "3", Text = "Vegan" }
+            //    };
+            return View();
         }
 
 

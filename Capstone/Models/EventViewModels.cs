@@ -18,6 +18,7 @@ namespace Capstone.Models
     }
     public class CreateEventViewModel
     {
+       
         [Required]
         [Display(Name = "Title")]
         public string Title { get; set; }
