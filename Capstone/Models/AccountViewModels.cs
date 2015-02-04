@@ -94,9 +94,11 @@ namespace Capstone.Models
         public string LastName { get; set; }
 
         [Required]
-        [Display(Name = "Address")]
-        public string Address { get; set; }
+        [Display(Name = "Address 1")]
+        public string Address1 { get; set; }
 
+        [Display(Name = "Address 2")]
+        public string Address2 { get; set; }
 
         [Required]
         [Display(Name = "City")]
@@ -114,21 +116,17 @@ namespace Capstone.Models
         public string Zip { get; set; }
 
         [Required]
-        [Display(Name = "Country")]
-        public string Country { get; set; }
-
-        [Required]
-        [Display(Name = "Primary Phone")]
+        [Display(Name = "Home Phone")]
         [Phone]
-        public string PrimaryPhone { get; set; }
+        public string HomePhone { get; set; }
 
-        [Display(Name = "Secondary Phone")]
+        [Display(Name = "Cell Phone")]
         [Phone]
-        public string SecondaryPhone { get; set; }
+        public string CellPhone { get; set; }
 
-        [Display(Name = "Fax")]
+        [Display(Name = "Office Phone")]
         [Phone]
-        public string Fax { get; set; }
+        public string OfficePhone { get; set; }
 
         [Required]
         [Display(Name = "Company Name")]
@@ -136,6 +134,11 @@ namespace Capstone.Models
 
         [Display(Name = "Branch/Location")]
         public string Branch { get; set; }
+
+        [Required]
+        [Display(Name = "Food Preference")]
+        public string FoodPreference { get; set; }
+        public IEnumerable<System.Web.Mvc.SelectListItem> Food { get; set; }
 
         [Display(Name = "Additional Info")]
         public string AdditionalInfo { get; set; }
