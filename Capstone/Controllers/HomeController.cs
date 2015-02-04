@@ -11,7 +11,6 @@ namespace Capstone.Controllers
     {
         public ActionResult Index()
         {
-            
             return View();
         }
         public ActionResult Events()
