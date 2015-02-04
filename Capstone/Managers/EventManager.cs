@@ -68,7 +68,7 @@ namespace Capstone.Managers
             if (dataEvent == null)
             {
                 // The event does not exist in the database.
-                return null;
+                return EventNotFound();
             }
 
             // The event exists and we have it stored as data event. Let's update it.
@@ -126,7 +126,7 @@ namespace Capstone.Managers
             if (dataEvent == null)
             {
                 // We did not find the event to cancel through the id
-                return null;
+                return EventNotFound();
             }
 
             // Change the status to cancelled :(
@@ -142,6 +142,25 @@ namespace Capstone.Managers
             model.Event = containerEvent;
 
             return model;
+        }
+
+        public EventsViewModels GetAllEvents()
+        {
+            // Grab all events that the user would be able to sign up for.
+            List<Data.Event> dataEvents = Container_Classes.Event.DatabaseToDataEvent(_repository.GetAll<Data.Event>(x => x.Status.Equals("ACTIVE", StringComparison.Ordinal)));
+            List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
+
+            // Put the events into the container classes.
+            foreach (Data.Event dataEvent in dataEvents)
+            {
+                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent));
+            }
+
+            EventsViewModels model = new EventsViewModels();
+            model.Events = containerEvents;
+
+            return model;
+
         }
 
         public EventsViewModels GetEventsAttendingByUserID(Container_Classes.User containerUser)
@@ -183,6 +202,23 @@ namespace Capstone.Managers
 
             EventsViewModels model = new EventsViewModels();
             model.Events = containerEvents;
+
+            return model;
+        }
+
+        public EventViewModels EventNotFound()
+        {
+            // This could break if we have multiple events with the same name
+            Data.Event dataEvent =_repository.Get<Data.Event>(x => x.Title.Equals("NOTFOUND", StringComparison.Ordinal));
+            if (dataEvent == null)
+            {
+                // We can't even find the fake event!
+                return null;
+            }
+            Container_Classes.Event containerEvent = Container_Classes.Event.DataEventToContainerEvent(dataEvent);
+
+            EventViewModels model = new EventViewModels();
+            model.Event = containerEvent;
 
             return model;
         }
