@@ -29,6 +29,7 @@ namespace Capstone.Container_Classes
         public static User DataUserToUser(Data.User dUser, List<Food> foods){
             User user = new User();
 
+            user.ID = dUser.Id;
             user.AdditionalInfo = dUser.AdditionalInfo;
             user.Address1 = dUser.Address1;
             user.Address2 = dUser.Address2;
@@ -54,6 +55,7 @@ namespace Capstone.Container_Classes
         {
             User user = new User();
 
+            user.ID = dUser.Id;
             user.AdditionalInfo = dUser.AdditionalInfo;
             user.Address1 = dUser.Address1;
             user.Address2 = dUser.Address2;
@@ -78,6 +80,7 @@ namespace Capstone.Container_Classes
         {
             Data.User dUser = new Data.User();
 
+            dUser.Id = user.ID;
             dUser.AdditionalInfo = user.AdditionalInfo;
             dUser.Address1 = user.Address1;
             dUser.Address2 = dUser.Address2;

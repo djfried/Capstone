@@ -23,11 +23,14 @@ namespace Capstone.Managers
         public EventViewModels CreateEvent(Container_Classes.Event NewEvent)
         {
             // Convert the Container Event into a Data Event so it can be added to the database
-            Data.Event dataEvent = Container_Classes.Event.EventToDataEvent(NewEvent);
+            Data.Event dataEvent = Container_Classes.Event.ContainerEventToDataEvent(NewEvent);
             _repository.Add<Data.Event>(dataEvent);
 
             // Weak way of getting new event, this should break if two events have the same name!
             dataEvent = _repository.Get<Data.Event>(x => x.Title == NewEvent.Title);
+            
+            // Assign the ID to the added container object event
+            NewEvent.ID = dataEvent.Id;
 
             // Now we must add the types and categories to the database.
             // First the categories will be inserted to the database
@@ -60,66 +63,176 @@ namespace Capstone.Managers
 
         public EventViewModels UpdateEvent(Container_Classes.Event UpdatedEvent)
         {
-            if (_repository.Get<Container_Classes.Event>(x => x.ID == UpdatedEvent.ID) == null)
+            // Retreieve the existing event from the data to update it.
+            Data.Event dataEvent = _repository.Get<Data.Event>(x => x.Id == UpdatedEvent.ID);
+            if (dataEvent == null)
             {
-                // The event does not exist to update!
+                // The event does not exist in the database.
                 return null;
             }
 
-            // Update the event 
-            _repository.Update<Container_Classes.Event>(UpdatedEvent);
-            Container_Classes.Event newEvent = _repository.Get<Container_Classes.Event>(x => x.ID == UpdatedEvent.ID);
+            // The event exists and we have it stored as data event. Let's update it.
+            // First the event table will be updated
+            dataEvent = Container_Classes.Event.ContainerEventToDataEvent(UpdatedEvent);
+            _repository.Update<Data.Event>(dataEvent);
+
+
+            // Second the categories will be deleted and updated
+            // first we delete
+            List<Data.Category> dataCategories = DatabaseToDataCategories(_repository.GetAll<Data.Category>(x => x.Event_ID == UpdatedEvent.ID));
+            foreach (Data.Category dataCategory in dataCategories)
+            {
+                _repository.Delete<Data.Category>(dataCategory);
+            }
+
+            // and then we update (or add in this case)
+            dataCategories = Container_Classes.Category.ContainerCategoriesToDataCategories(UpdatedEvent.Categories);
+            dataCategories = Container_Classes.Category.AddEventIDToDataCategories(dataCategories, UpdatedEvent.ID);
+
+            foreach (Data.Category dataCategory in dataCategories)
+            {
+                _repository.Add<Data.Category>(dataCategory);
+            }
+
+
+            // Third the types will be deleted and updated
+            // first we delete the old
+            List<Data.Type> dataTypes = DatabaseToDataTypes(_repository.GetAll<Data.Type>(x => x.Event_ID == UpdatedEvent.ID));
+            foreach (Data.Type dataType in dataTypes)
+            {
+                _repository.Delete<Data.Type>(dataType);
+            }
+
+            // and then we update (or add in this case)
+            dataTypes = Container_Classes.Type.ContainerTypeToDataType(UpdatedEvent.Types);
+            dataTypes = Container_Classes.Type.AddEventIDToDataTypes(dataTypes, UpdatedEvent.ID);
+
+            foreach (Data.Type dataType in dataTypes)
+            {
+                _repository.Add<Data.Type>(dataType);
+            }
 
             _repository.SaveChanges();
 
             EventViewModels model = new EventViewModels();
-            model.Event = newEvent;
+            model.Event = UpdatedEvent;
 
             return model;
         }
 
-        public EventViewModels CancelEvent(int EventID)
+        public EventViewModels CancelEvent(Container_Classes.Event containerEvent)
         {
-            Container_Classes.Event fetchEvent = _repository.Get<Container_Classes.Event>(x => x.ID == EventID);
-            if (fetchEvent == null)
+            Data.Event dataEvent = _repository.Get<Data.Event>(x => x.Id == containerEvent.ID);
+            if (dataEvent == null)
             {
-                // Event does not exist!
+                // We did not find the event to cancel through the id
                 return null;
             }
 
-            fetchEvent.Status = "Cancelled";
-            // Send the object back to the database to be updated
-            _repository.Update<Container_Classes.Event>(fetchEvent);
-            // Pull the event back down to ensure the data was correctly updated
-            fetchEvent = _repository.Get<Container_Classes.Event>(x => x.ID == fetchEvent.ID);
-            if (!fetchEvent.Status.Equals("Cancelled", StringComparison.Ordinal))
-            {
-                // The event was not correctly cancelled!
-                return null;
-            }
-
+            // Change the status to cancelled :(
+            dataEvent.Status = "Cancelled";
+            // Push the update back to the database
+            _repository.Update<Data.Event>(dataEvent);
+            // Make sure we save our work!
             _repository.SaveChanges();
 
+            // Returned the updated event back to the view
+
             EventViewModels model = new EventViewModels();
-            model.Event = fetchEvent;
+            model.Event = containerEvent;
 
             return model;
         }
 
-        public EventsViewModels GetEventsAttendingByUserID(int UserID)
+        public EventsViewModels GetEventsAttendingByUserID(Container_Classes.User containerUser)
         {
-            //List<Event> attendingEvents = new List<Event>();
-            //List<Data.Registration
+            // Get the registrations table for the events - but only the ones that pertain to our user
+            List<Data.Registration> dataRegistrations = DatabaseToDataRegistration(_repository.GetAll<Data.Registration>(x => x.User_ID == containerUser.ID));
+            // Extract the events from the remaining entries 
+            List<Data.Event> dataEvents = new List<Data.Event>();
 
+            foreach (Data.Registration dataRegistration in dataRegistrations)
+            {
+                dataEvents.Add(_repository.Get<Data.Event>(x => x.Id == dataRegistration.Event_ID));
+            }
 
-            return null;
+            List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
+            foreach (Data.Event dataEvent in dataEvents)
+            {
+                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent));
+            }
+
+            EventsViewModels model = new EventsViewModels();
+            model.Events = containerEvents;
+
+            return model;
         }
 
-        public EventsViewModels GetEventsCreatedByUser(int UserID)
+        public EventsViewModels GetEventsCreatedByUser(Container_Classes.User containerUser)
         {
+            // Find the events that are being moderated by this user's ID
+            List<Data.Event> dataEvents = DatabaseToDataEvent(_repository.GetAll<Data.Event>(x => x.Owner_ID == containerUser.ID));
 
-            return null;
+            // Transform these events into a list of container objects
+            List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
+
+            foreach (Data.Event dataEvent in dataEvents)
+            {
+                containerEvents.Add(Container_Classes.Event.DataEventToContainerEvent(dataEvent));
+            }
+
+            EventsViewModels model = new EventsViewModels();
+            model.Events = containerEvents;
+
+            return model;
         }
 
+        public List<Data.Category> DatabaseToDataCategories(IEnumerable<Data.Category> source)
+        {
+            List<Data.Category> dataCategories = new List<Data.Category>();
+
+            foreach (Data.Category dataCategory in source)
+            {
+                dataCategories.Add(dataCategory);
+            }
+
+            return dataCategories;
+        }
+
+        public List<Data.Type> DatabaseToDataTypes(IEnumerable<Data.Type> source)
+        {
+            List<Data.Type> dataTypes = new List<Data.Type>();
+
+            foreach (Data.Type dataType in source)
+            {
+                dataTypes.Add(dataType);
+            }
+
+            return dataTypes;
+        }
+
+        public List<Data.Registration> DatabaseToDataRegistration(IEnumerable<Data.Registration> source)
+        {
+            List<Data.Registration> dataRegistrations = new List<Data.Registration>();
+
+            foreach (Data.Registration dataRegistration in source)
+            {
+                dataRegistrations.Add(dataRegistration);
+            }
+
+            return dataRegistrations;
+        }
+
+        public List<Data.Event> DatabaseToDataEvent(IEnumerable<Data.Event> source)
+        {
+            List<Data.Event> dataEvents = new List<Data.Event>();
+
+            foreach (Data.Event dataEvent in source)
+            {
+                dataEvents.Add(dataEvent);
+            }
+
+            return dataEvents;
+        }
     }
 }
