@@ -22,18 +22,38 @@ namespace Capstone.Managers
 
         public EventViewModels CreateEvent(Container_Classes.Event NewEvent)
         {
-            // Attempted to insert the item into the database.
-            _repository.Add(NewEvent);
-            Container_Classes.Event insertedEvent = _repository.Get<Container_Classes.Event>(x => x.Title == NewEvent.Title);
-            if(insertedEvent == null){
-                // The insert failed. The event was not found in the database. 
-                return null;
+            // Convert the Container Event into a Data Event so it can be added to the database
+            Data.Event dataEvent = Container_Classes.Event.EventToDataEvent(NewEvent);
+            _repository.Add<Data.Event>(dataEvent);
+
+            // Weak way of getting new event, this should break if two events have the same name!
+            dataEvent = _repository.Get<Data.Event>(x => x.Title == NewEvent.Title);
+
+            // Now we must add the types and categories to the database.
+            // First the categories will be inserted to the database
+            List<Data.Category> dataCategories = Container_Classes.Category.ContainerCategoriesToDataCategories(NewEvent.Categories);
+            dataCategories = Container_Classes.Category.AddEventIDToDataCategories(dataCategories, dataEvent.Id);
+
+            // Insert all of the categories into the database
+            foreach (Data.Category dataCategory in dataCategories)
+            {
+                _repository.Add<Data.Category>(dataCategory);
+            }
+
+            // Second the types will be inserted to the database.
+            List<Data.Type> dataTypes = Container_Classes.Type.ContainerTypeToDataType(NewEvent.Types);
+            dataTypes = Container_Classes.Type.AddEventIDToDataTypes(dataTypes, dataEvent.Id);
+
+            // Insert all of the types into the database
+            foreach (Data.Type dataType in dataTypes)
+            {
+                _repository.Add<Data.Type>(dataType);
             }
 
             _repository.SaveChanges();
 
             EventViewModels model = new EventViewModels();
-            model.Event = insertedEvent;
+            model.Event = NewEvent;
 
             return model;
         }
