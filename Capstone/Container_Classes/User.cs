@@ -22,40 +22,15 @@ namespace Capstone.Container_Classes
         public string PhoneOffice { get; set; }
         public string CompanyName { get; set; }
         public string BranchLocation { get; set; }
-        public List<Food> Foods { get; set; }
+        public string Foods { get; set; }
         public string AdditionalInfo { get; set; }
 
         // Converts a Database Data.User to a Container object
-        public static User DataUserToUser(Data.User dUser, List<Food> foods){
-            User user = new User();
-
-            user.ID = dUser.Id;
-            user.AdditionalInfo = dUser.AdditionalInfo;
-            user.Address1 = dUser.Address1;
-            user.Address2 = dUser.Address2;
-            user.BranchLocation = dUser.BranchLocation;
-            user.City = dUser.City;
-            user.CompanyName = dUser.CompanyName;
-            user.FirstName = dUser.FirstName;
-            user.Foods = foods;
-            user.LastName = dUser.LastName;
-            user.Password = dUser.Password;
-            user.PhoneCell = dUser.PhoneCell;
-            user.PhoneHome = dUser.PhoneHome;
-            user.PhoneOffice = dUser.PhoneOffice;
-            user.State = dUser.State;
-            user.Username = dUser.Username;
-            user.Zip = dUser.Zip;
-
-            return user;
-        }
-
-        // Used when we don't need the information of foods
-        public static User DataUserToUser(Data.User dUser)
+        public static User DataUserToUser(Data.User dUser, String food)
         {
             User user = new User();
 
-            user.ID = dUser.Id;
+            user.ID = dUser.UserID;
             user.AdditionalInfo = dUser.AdditionalInfo;
             user.Address1 = dUser.Address1;
             user.Address2 = dUser.Address2;
@@ -63,6 +38,7 @@ namespace Capstone.Container_Classes
             user.City = dUser.City;
             user.CompanyName = dUser.CompanyName;
             user.FirstName = dUser.FirstName;
+            user.Foods = food;
             user.LastName = dUser.LastName;
             user.Password = dUser.Password;
             user.PhoneCell = dUser.PhoneCell;
@@ -76,11 +52,11 @@ namespace Capstone.Container_Classes
         }
 
         // Converts a Container User Object to a Data.User object
-        public static Data.User UserToDataUser(User user)
+        public static Data.User UserToDataUser(User user, int food_ID)
         {
             Data.User dUser = new Data.User();
 
-            dUser.Id = user.ID;
+            dUser.UserID = user.ID;
             dUser.AdditionalInfo = user.AdditionalInfo;
             dUser.Address1 = user.Address1;
             dUser.Address2 = dUser.Address2;
@@ -88,6 +64,7 @@ namespace Capstone.Container_Classes
             dUser.City = user.City;
             dUser.CompanyName = user.CompanyName;
             dUser.FirstName = user.FirstName;
+            dUser.Food_ID = food_ID;
             dUser.LastName = user.LastName;
             dUser.Password = user.Password;
             dUser.PhoneCell = user.PhoneCell;

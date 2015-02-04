@@ -12,16 +12,12 @@ namespace Capstone.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Food
+    public partial class sysdiagram
     {
-        public Food()
-        {
-            this.Users = new HashSet<User>();
-        }
-    
-        public int FoodID { get; set; }
-        public string Food1 { get; set; }
-    
-        public virtual ICollection<User> Users { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

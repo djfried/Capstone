@@ -14,8 +14,14 @@ namespace Capstone.Data
     
     public partial class Type
     {
-        public int Id { get; set; }
+        public Type()
+        {
+            this.Events = new HashSet<Event>();
+        }
+    
+        public int TypeID { get; set; }
         public string Type1 { get; set; }
-        public int Event_ID { get; set; }
+    
+        public virtual ICollection<Event> Events { get; set; }
     }
 }

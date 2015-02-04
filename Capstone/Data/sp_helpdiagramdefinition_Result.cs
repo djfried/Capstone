@@ -10,18 +10,10 @@
 namespace Capstone.Data
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Food
+    public partial class sp_helpdiagramdefinition_Result
     {
-        public Food()
-        {
-            this.Users = new HashSet<User>();
-        }
-    
-        public int FoodID { get; set; }
-        public string Food1 { get; set; }
-    
-        public virtual ICollection<User> Users { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }
