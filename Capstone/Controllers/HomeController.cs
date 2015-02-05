@@ -33,7 +33,7 @@ namespace Capstone.Controllers
             EventsViewModels eventsModel = new EventsViewModels();
             EventManager eventManager = new EventManager();
 
-            eventsModel = eventManager.GetEventsCreatedByUser(SessionManager.SessionID)
+            eventsModel = eventManager.GetEventsCreatedByUser(SessionManager.SessionID);
 
             return View(eventsModel);
         }
