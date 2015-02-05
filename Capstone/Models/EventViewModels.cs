@@ -23,10 +23,6 @@ namespace Capstone.Models
         [Display(Name = "Title")]
         public string Title { get; set; }
 
-        //[Required]
-        //[Display(Name = "Event Date")]
-        //public string EventDate { get; set; }
-
         [Required]
         [Display(Name = "Start Time")]
         public string StartTime { get; set; }
