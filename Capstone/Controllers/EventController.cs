@@ -34,10 +34,19 @@ namespace Capstone.Controllers
             {
                 EventManager eventManager = new EventManager();
                 Event containerEvent = new Event();
-                containerEvent.Title = model.Title;
-                containerEvent.StartDate = Convert.ToDateTime(model.StartTime);
+
+                containerEvent.Category = "All";
+                containerEvent.Description = model.Description;
                 containerEvent.EndDate = Convert.ToDateTime(model.EndTime);
-                
+                containerEvent.Location = model.Location;
+                containerEvent.Logo_Path = model.LogoPath;
+                containerEvent.Owner_ID = SessionManager.SessionID;
+                containerEvent.StartDate = Convert.ToDateTime(model.StartTime);
+                containerEvent.Status = "ON";
+                containerEvent.Title = model.Title;
+                containerEvent.Type = model.Type;
+
+                EventViewModels eventModel = eventManager.CreateEvent(containerEvent);
                 
                 return RedirectToAction("Events", "Home");
             }
