@@ -79,7 +79,7 @@ namespace Capstone.Controllers
             UserViewModels userModel = userManager.LoginUser(model.Email, model.Password);
             SessionManager.SessionID = userModel.User.ID;
 
-            return RedirectToLocal(returnUrl);
+            return RedirectToAction("Events", "Home");
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
@@ -185,7 +185,7 @@ namespace Capstone.Controllers
 
                 Capstone.Models.UserViewModels userModel = userManager.CreateUser(containerUser);
                 SessionManager.SessionID = userModel.User.ID;
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Events", "Home");
 
                 // END OF DAN'S CODE
 
