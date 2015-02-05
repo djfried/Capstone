@@ -349,13 +349,14 @@ namespace Capstone.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
             return View();
         }
         //
         //POST: /Account/UpdateAccount
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateAccount(RegisterViewModel model)
+        public ActionResult UpdateAccount(UpdateAccountViewModel model)
         {
             if (SessionManager.LoggedIn == false)
             {

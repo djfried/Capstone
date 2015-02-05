@@ -3,6 +3,71 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Capstone.Models
 {
+
+    public class UpdateAccountViewModel
+    {
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Address 1")]
+        public string Address1 { get; set; }
+
+        [Display(Name = "Address 2")]
+        public string Address2 { get; set; }
+
+        [Display(Name = "City")]
+        public string City { get; set; }
+
+        [Display(Name = "State")]
+        public string State { get; set; }
+
+        [DataType(DataType.PostalCode)]
+        [RegularExpression("\\d{5}",
+        ErrorMessage = "Zip Code is required and must be properly formatted.")]
+        [Display(Name = "Zip")]
+        public string Zip { get; set; }
+
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
+        [Display(Name = "Home Phone")]
+
+        public string HomePhone { get; set; }
+
+        [Display(Name = "Cell Phone")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
+        public string CellPhone { get; set; }
+
+        [Display(Name = "Office Phone")]
+        [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Entered phone format is not valid.")]
+        public string OfficePhone { get; set; }
+
+        [Required]
+        [Display(Name = "Company Name")]
+        public string CompanyName { get; set; }
+
+        [Display(Name = "Branch/Location")]
+        public string Branch { get; set; }
+
+        [Required]
+        [Display(Name = "Food Preference")]
+        public string FoodPreference { get; set; }
+        public IEnumerable<System.Web.Mvc.SelectListItem> Food { get; set; }
+
+        [Display(Name = "Additional Info")]
+        public string AdditionalInfo { get; set; }
+    }
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
