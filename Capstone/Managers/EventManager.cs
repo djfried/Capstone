@@ -107,7 +107,7 @@ namespace Capstone.Managers
         public EventsViewModels GetAllEvents()
         {
             // Grab all events that the user would be able to sign up for.
-            List<Data.Event> dataEvents = Container_Classes.Event.DatabaseToDataEvent(_repository.GetAll<Data.Event>(x => x.Status.Equals("ACTIVE", StringComparison.Ordinal)));
+            List<Data.Event> dataEvents = Container_Classes.Event.DatabaseToDataEvent(_repository.GetAll<Data.Event>(x => x.Status.Equals("ON")));
             List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
             Data.Type dataType;
             Data.Category dataCategory;
