@@ -166,10 +166,10 @@ namespace Capstone.Managers
             return model;
         }
 
-        public EventsViewModels GetEventsCreatedByUser(Container_Classes.User containerUser)
+        public EventsViewModels GetEventsCreatedByUser(int UserID)
         {
             // Find the events that are being moderated by this user's ID
-            List<Data.Event> dataEvents = Container_Classes.Event.DatabaseToDataEvent(_repository.GetAll<Data.Event>(x => x.Owner_ID == containerUser.ID));
+            List<Data.Event> dataEvents = Container_Classes.Event.DatabaseToDataEvent(_repository.GetAll<Data.Event>(x => x.Owner_ID == UserID));
 
             // Transform these events into a list of container objects
             List<Container_Classes.Event> containerEvents = new List<Container_Classes.Event>();
