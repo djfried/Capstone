@@ -306,6 +306,9 @@
     <Content Include="Views\Event\CreateEvent.cshtml" />
     <Content Include="Views\Home\Events.cshtml" />
     <Content Include="Views\Home\MyEvents.cshtml" />
+    <Content Include="Views\Home\View.cshtml" />
+    <Content Include="Views\Account\UpdateAccount.cshtml" />
+    <Content Include="Views\Home\AttendingEvents.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

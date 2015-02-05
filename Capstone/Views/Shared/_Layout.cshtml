@@ -23,14 +23,15 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Search Events", "Events", "Home")</li>
-                    <li>@Html.ActionLink("My Events", "About", "Home")</li>
+                    <li>@Html.ActionLink("Attending Events", "AttendingEvents", "Home")</li>
+                    <li>@Html.ActionLink("My Events", "MyEvents", "Home")</li>
                     <li>@Html.ActionLink("Schedule Events", "CreateEvent", "Event")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="UserName">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span><span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
-                            <li>@Html.ActionLink("Update Account", "Contact", "Home")</li>
+                            <li>@Html.ActionLink("Update Account", "UpdateAccount", "Account")</li>
                             <li class="divider"></li>
                             <li>@Html.ActionLink("Logout", "Contact", "Home")</li>
                     
