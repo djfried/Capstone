@@ -30,5 +30,9 @@ namespace Capstone.Controllers
         {
             return View();
         }
+        public ActionResult AttendingEvents()
+        {
+            return View();
+        }
     }
 }

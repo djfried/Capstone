@@ -441,6 +441,13 @@ namespace Capstone.Controllers
             return View();
         }
 
+        //
+        // GET: /Account/UpdateAccount
+        public ActionResult UpdateAccount()
+        {
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -460,6 +467,7 @@ namespace Capstone.Controllers
 
             base.Dispose(disposing);
         }
+
 
         #region Helpers
         // Used for XSRF protection when adding external logins
