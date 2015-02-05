@@ -26,9 +26,16 @@ namespace Capstone.Controllers
 
             return View(eventsModel);
         }
+
+        // When the my events page is loaded all the events which the user is the owner is loaded
         public ActionResult MyEvents()
         {
-            return View();
+            EventsViewModels eventsModel = new EventsViewModels();
+            EventManager eventManager = new EventManager();
+
+            eventsModel = eventManager.GetEventsCreatedByUser(SessionManager.SessionID)
+
+            return View(eventsModel);
         }
     }
 }
