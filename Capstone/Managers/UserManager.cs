@@ -19,6 +19,30 @@ namespace Capstone.Managers
         private static CapstoneEntities _entities = new CapstoneEntities();
         private IRepository _repository = new Repository(_entities);
 
+        public UserViewModels LoginUser(String username, String password)
+        {
+            // Try and find the username within the database
+            Data.User dataUser = _repository.Get<Data.User>(x => x.Username.Equals(username));
+            if (dataUser == null)
+            {
+                return UserNotFound();
+            }
+            // Ensure that the passwords match
+            if (!dataUser.Password.Equals(password))
+            {
+                return UserNotFound();
+            }
+
+            Data.Food dataFood = _repository.Get<Data.Food>(x => x.FoodID == dataUser.Food_ID);
+
+            Container_Classes.User containerUser = Container_Classes.User.DataUserToUser(dataUser, dataFood.Food1);
+
+            UserViewModels model = new UserViewModels();
+            model.User = containerUser;
+
+            return model;
+        }
+
         // Once the controller has passed the User info and foods list it can be inserted into the database
         // and a view of that inserted user is returned. 
         public UserViewModels CreateUser(Container_Classes.User NewUser)
@@ -82,6 +106,7 @@ namespace Capstone.Managers
 
             Data.User dUser = Container_Classes.User.UserToDataUser(UpdatedUser, dataFood.FoodID);
             _repository.Update<Data.User>(dUser);
+            _repository.SaveChanges();
 
             Data.User addedDataUser = _repository.Get<Data.User>(x => x.Username == UpdatedUser.Username);
             if (addedDataUser == null)
@@ -89,8 +114,6 @@ namespace Capstone.Managers
                 // The user should have been inserted into the database, but they were not. (Or failed during insertion)
                 return UserNotFound();
             }
-
-            _repository.SaveChanges();
 
             UpdatedUser = Container_Classes.User.DataUserToUser(addedDataUser, UpdatedUser.Foods);
 

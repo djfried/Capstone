@@ -38,14 +38,13 @@ namespace Capstone.Managers
             // Convert the Container Event into a Data Event so it can be added to the database
             Data.Event dataEvent = Container_Classes.Event.ContainerEventToDataEvent(NewEvent, NewEvent.Owner_ID, dataType.TypeID, dataCategory.CategoryID);
             _repository.Add<Data.Event>(dataEvent);
+            _repository.SaveChanges();
 
             // Weak way of getting new event, this should break if two events have the same name!
             dataEvent = _repository.Get<Data.Event>(x => x.Title == NewEvent.Title);
             
             // Assign the ID to the added container object event
             NewEvent.ID = dataEvent.EventID;
-
-            _repository.SaveChanges();
 
             EventViewModels model = new EventViewModels();
             model.Event = NewEvent;
