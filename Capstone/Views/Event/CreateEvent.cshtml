@@ -34,7 +34,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.EndTime, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.EndTime, new { @type = "time", @class = "form-control" })
+            @Html.TextBoxFor(m => m.EndTime, new { @type = "datetime-local", @class = "form-control" })
             @Html.ValidationMessageFor(m => m.EndTime, "", new { @class = "text-danger" })
         </div>
     </div>

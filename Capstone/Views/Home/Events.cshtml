@@ -6,10 +6,32 @@
 
 <h2>Upcoming Events</h2>
 <hr/>
+<table class="table table-striped">
+    <tr>
+        <th>Event Title</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Location</th>
+        <th>Type</th>
+    </tr>
 @foreach (var item in Model.Events)
-{
-    @Html.DisplayFor(m=>item.Title)
-    @Html.DisplayFor(m => item.StartDate)
-    @Html.DisplayFor(m => item.EndDate)
+{   <tr>
+        <td>
+            @Html.DisplayFor(m=>item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(m => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(m => item.EndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(m => item.Location)
+        </td>
+        <td>
+            @Html.DisplayFor(m => item.Type)
+        </td>
+    </tr>
 }
 
+</table>
