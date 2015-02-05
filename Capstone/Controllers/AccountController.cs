@@ -75,6 +75,8 @@ namespace Capstone.Controllers
                 return View(model);
             }
 
+            //DANN
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
@@ -186,6 +188,7 @@ namespace Capstone.Controllers
                 containerUser.Zip = model.Zip;
 
                 Capstone.Models.UserViewModels userModel = userManager.CreateUser(containerUser);
+                SessionManager.SessionID = userModel.User.ID;
                 return RedirectToAction("Index", "Home");
 
                 // END OF DAN'S CODE

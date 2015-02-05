@@ -226,6 +226,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Managers\EventManager.cs" />
+    <Compile Include="Managers\SessionManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EventsViewModels.cs" />
