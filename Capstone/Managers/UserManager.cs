@@ -106,6 +106,7 @@ namespace Capstone.Managers
 
             Data.User dUser = Container_Classes.User.UserToDataUser(UpdatedUser, dataFood.FoodID);
             _repository.Update<Data.User>(dUser);
+            _repository.SaveChanges();
 
             Data.User addedDataUser = _repository.Get<Data.User>(x => x.Username == UpdatedUser.Username);
             if (addedDataUser == null)
@@ -113,8 +114,6 @@ namespace Capstone.Managers
                 // The user should have been inserted into the database, but they were not. (Or failed during insertion)
                 return UserNotFound();
             }
-
-            _repository.SaveChanges();
 
             UpdatedUser = Container_Classes.User.DataUserToUser(addedDataUser, UpdatedUser.Foods);
 

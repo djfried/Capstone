@@ -56,7 +56,6 @@ namespace Capstone.Container_Classes
         {
             Data.User dUser = new Data.User();
 
-            dUser.UserID = user.ID;
             dUser.AdditionalInfo = user.AdditionalInfo;
             dUser.Address1 = user.Address1;
             dUser.Address2 = dUser.Address2;
