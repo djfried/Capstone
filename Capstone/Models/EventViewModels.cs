@@ -40,12 +40,15 @@ namespace Capstone.Models
         public string Type { get; set; }
         public IEnumerable<System.Web.Mvc.SelectListItem> TypeList { get; set; }
 
+        [Required]
         [Display(Name = "Description")]
         public string Description { get; set; }
 
+        
         [Display(Name = "Additional Info")]
         public string AdditionalInfo { get; set; }
         
+        [Required]
         [FileExtensions(Extensions=".jpg",ErrorMessage="File must be .jpg")]
         [Display(Name = "Logo")]
         public string LogoPath { get; set; }
