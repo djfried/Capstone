@@ -451,8 +451,13 @@ namespace Capstone.Controllers
 
         //
         // GET: /Account/UpdateAccount
+        [AllowAnonymous]
         public ActionResult UpdateAccount()
         {
+            if (SessionManager.LoggedIn == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
