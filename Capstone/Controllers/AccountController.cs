@@ -78,6 +78,7 @@ namespace Capstone.Controllers
             UserManager userManager = new UserManager();
             UserViewModels userModel = userManager.LoginUser(model.Email, model.Password);
             SessionManager.SessionID = userModel.User.ID;
+            SessionManager.Username = userModel.User.Username;
 
             return RedirectToAction("Events", "Home");
 
@@ -185,6 +186,8 @@ namespace Capstone.Controllers
 
                 Capstone.Models.UserViewModels userModel = userManager.CreateUser(containerUser);
                 SessionManager.SessionID = userModel.User.ID;
+                SessionManager.Username = userModel.User.Username;
+
                 return RedirectToAction("Events", "Home");
 
                 // END OF DAN'S CODE

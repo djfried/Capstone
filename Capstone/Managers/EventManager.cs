@@ -22,21 +22,18 @@ namespace Capstone.Managers
 
         public EventViewModels CreateEvent(Container_Classes.Event NewEvent)
         {
+            int typeID = int.Parse(NewEvent.Type);
             // Convert the type string and category string to database keys
-            Data.Type dataType = _repository.Get<Data.Type>(x => x.Type1.Equals(NewEvent.Type));
+            Data.Type dataType = _repository.Get<Data.Type>(x => x.TypeID == typeID);
             if(dataType == null){
                 // Could not map type to the database
                 return null;
             }
 
             Data.Category dataCategory = _repository.Get<Data.Category>(x => x.Category1.Equals(NewEvent.Category));
-            if(dataCategory == null){
-                // Could not mape category string to the database.
-                return null;
-            }
 
             // Convert the Container Event into a Data Event so it can be added to the database
-            Data.Event dataEvent = Container_Classes.Event.ContainerEventToDataEvent(NewEvent, NewEvent.Owner_ID, dataType.TypeID, dataCategory.CategoryID);
+            Data.Event dataEvent = Container_Classes.Event.ContainerEventToDataEvent(NewEvent, dataCategory.CategoryID, dataType.TypeID, NewEvent.Owner_ID);
             _repository.Add<Data.Event>(dataEvent);
             _repository.SaveChanges();
 
@@ -70,16 +67,9 @@ namespace Capstone.Managers
                 return null;
             }
 
-            Data.Category dataCategory = _repository.Get<Data.Category>(x => x.Category1.Equals(UpdatedEvent.Category));
-            if (dataCategory == null)
-            {
-                // Could not mape category string to the database.
-                return null;
-            }
 
             // The event exists and we have it stored as data event. Let's update it.
-            // First the event table will be updated
-            dataEvent = Container_Classes.Event.ContainerEventToDataEvent(UpdatedEvent, UpdatedEvent.Owner_ID, dataType.TypeID, dataCategory.CategoryID);
+            dataEvent = Container_Classes.Event.ContainerEventToDataEvent(UpdatedEvent, 1, dataType.TypeID, UpdatedEvent.Owner_ID);
             _repository.Update<Data.Event>(dataEvent);
 
             _repository.SaveChanges();
