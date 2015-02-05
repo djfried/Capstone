@@ -37,9 +37,16 @@ namespace Capstone.Controllers
 
             return View(eventsModel);
         }
+
+        // Loads the events that the logged in user is attending. 
         public ActionResult AttendingEvents()
         {
-            return View();
+            EventsViewModels eventsModel = new EventsViewModels();
+            EventManager eventManager = new EventManager();
+
+            eventsModel = eventManager.GetEventsAttendingByUserID(SessionManager.SessionID);
+
+            return View(eventsModel);
         }
     }
 }

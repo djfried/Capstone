@@ -15,6 +15,7 @@ namespace Capstone
     {
         protected void Application_Start()
         {
+            Managers.SessionManager.LoggedIn = false;
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

@@ -127,10 +127,10 @@ namespace Capstone.Managers
 
         }
 
-        public EventsViewModels GetEventsAttendingByUserID(Container_Classes.User containerUser)
+        public EventsViewModels GetEventsAttendingByUserID(int userID)
         {
             // Get the registrations table for the events - but only the ones that pertain to our user
-            List<Data.Registration> dataRegistrations = DatabaseToDataRegistration(_repository.GetAll<Data.Registration>(x => x.User_ID == containerUser.ID));
+            List<Data.Registration> dataRegistrations = DatabaseToDataRegistration(_repository.GetAll<Data.Registration>(x => x.User_ID == userID));
             // Extract the events from the remaining entries 
             List<Data.Event> dataEvents = new List<Data.Event>();
 

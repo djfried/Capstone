@@ -9,5 +9,6 @@ namespace Capstone.Managers
     {
         public static int SessionID { get; set; }
         public static string Username { get; set; }
+        public static bool LoggedIn { get; set; }
     }
 }

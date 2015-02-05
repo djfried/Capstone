@@ -79,6 +79,7 @@ namespace Capstone.Controllers
             UserViewModels userModel = userManager.LoginUser(model.Email, model.Password);
             SessionManager.SessionID = userModel.User.ID;
             SessionManager.Username = userModel.User.Username;
+            SessionManager.LoggedIn = true;
 
             return RedirectToAction("Events", "Home");
 
@@ -187,6 +188,7 @@ namespace Capstone.Controllers
                 Capstone.Models.UserViewModels userModel = userManager.CreateUser(containerUser);
                 SessionManager.SessionID = userModel.User.ID;
                 SessionManager.Username = userModel.User.Username;
+                SessionManager.LoggedIn = true;
 
                 return RedirectToAction("Events", "Home");
 
@@ -432,7 +434,10 @@ namespace Capstone.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut();
+            SessionManager.LoggedIn = false;
+            SessionManager.SessionID = -1;
+            SessionManager.Username = null;
+            
             return RedirectToAction("Index", "Home");
         }
 
