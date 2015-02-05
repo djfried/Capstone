@@ -175,7 +175,7 @@ namespace Capstone.Controllers
                 containerUser.CompanyName = model.CompanyName;
                 containerUser.FirstName = model.FirstName;
                 containerUser.Foods = model.FoodPreference;
-                //containerUser.ID
+                containerUser.ID = 4;
                 containerUser.LastName = model.LastName;
                 containerUser.Password = model.Password;
                 containerUser.PhoneCell = model.CellPhone;

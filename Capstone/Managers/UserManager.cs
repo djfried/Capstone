@@ -30,8 +30,10 @@ namespace Capstone.Managers
                 return null;
             }
 
+            int foodIndex = int.Parse(NewUser.Foods);
+
             // Find out the food id that the user provided and get the ID number for the database entry.
-            Data.Food userFood = _repository.Get<Data.Food>(x => x.Food1.Equals(NewUser.Foods));
+            Data.Food userFood = _repository.Get<Data.Food>(x => x.FoodID == foodIndex);
             if (userFood == null)
             {
                 // Food requested was not in the database!
@@ -42,6 +44,8 @@ namespace Capstone.Managers
             Data.User dUser = Container_Classes.User.UserToDataUser(NewUser, userFood.FoodID);
             _repository.Add<Data.User>(dUser);
 
+            _repository.SaveChanges();
+
             // Get the inserted NewUser back from the database
             dUser =_repository.Get<Data.User>(x => x.Username == NewUser.Username);
             if (dUser == null)
@@ -49,8 +53,6 @@ namespace Capstone.Managers
                 // The user was not uploaded into the database.
                 return UserNotFound();
             }
-
-            _repository.SaveChanges();
 
             // Create the model to return the information to the view.
             UserViewModels model = new UserViewModels();
@@ -68,8 +70,10 @@ namespace Capstone.Managers
                 return UserNotFound();
             }
 
+            int foodID = int.Parse(UpdatedUser.Foods);
+
             // Get the food ID from the database to store in the user object
-            Data.Food dataFood = _repository.Get<Data.Food>(x => x.Food1.Equals(UpdatedUser.Foods));
+            Data.Food dataFood = _repository.Get<Data.Food>(x => x.FoodID == foodID);
             if (dataFood == null)
             {
                 // The food ID wasn't found
@@ -170,8 +174,9 @@ namespace Capstone.Managers
         // Returns the view of all of the events the user is registered for. 
         public EventsViewModels RegisterUserForEvent(Container_Classes.Event containerEvent, Container_Classes.User containerUser)
         {
+            int foodID = int.Parse(containerUser.Foods);
             // Get the food ID from the database using the containerUser object
-            Data.Food dataFood = _repository.Get<Data.Food>(x => x.Food1.Equals(containerUser.Foods));
+            Data.Food dataFood = _repository.Get<Data.Food>(x => x.FoodID == foodID);
             // Ensure that we found the food in the database
             if (dataFood == null)
             {
