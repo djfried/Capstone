@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Capstone.Models;
 using Capstone.Managers;
+using Capstone.Container_Classes;
 
 namespace Capstone.Controllers
 {
@@ -19,16 +20,6 @@ namespace Capstone.Controllers
         public ActionResult CreateEvent()
         {
 
-            
-
-            //ViewBag.TypeList = new[]
-            //    {
-            //        new SelectListItem { Value = "1", Text = "Seminar" },
-            //        new SelectListItem { Value = "2", Text = "Meeting" },
-            //        new SelectListItem { Value = "3", Text = "Training" },
-            //        new SelectListItem { Value = "4", Text = "Social" },
-            //        new SelectListItem { Value = "5", Text = "Other" }
-            //    };
             return View();
         }
         
@@ -38,10 +29,18 @@ namespace Capstone.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateEvent(CreateEventViewModel model)
         {
-            
-           if(ModelState.IsValid)
-               return RedirectToAction("Events", "Home");
-             
+
+            if (ModelState.IsValid)
+            {
+                EventManager eventManager = new EventManager();
+                Event containerEvent = new Event();
+                containerEvent.Title = model.Title;
+                containerEvent.StartDate = Convert.ToDateTime(model.StartTime);
+                containerEvent.EndDate = Convert.ToDateTime(model.EndTime);
+                
+                
+                return RedirectToAction("Events", "Home");
+            }
             return View(model);
         }
     }
