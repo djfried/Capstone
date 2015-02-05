@@ -19,6 +19,12 @@ namespace Capstone.Controllers
         // When the events page is loaded find all events to display to the user. 
         public ActionResult Events()
         {
+
+            if (SessionManager.LoggedIn == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             EventsViewModels eventsModel = new EventsViewModels();
             EventManager eventManager = new EventManager();
             
@@ -30,6 +36,12 @@ namespace Capstone.Controllers
         // When the my events page is loaded all the events which the user is the owner is loaded
         public ActionResult MyEvents()
         {
+
+            if (SessionManager.LoggedIn == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             EventsViewModels eventsModel = new EventsViewModels();
             EventManager eventManager = new EventManager();
 
@@ -41,6 +53,12 @@ namespace Capstone.Controllers
         // Loads the events that the logged in user is attending. 
         public ActionResult AttendingEvents()
         {
+
+            if (SessionManager.LoggedIn == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             EventsViewModels eventsModel = new EventsViewModels();
             EventManager eventManager = new EventManager();
 

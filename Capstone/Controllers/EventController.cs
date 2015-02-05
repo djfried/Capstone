@@ -19,7 +19,10 @@ namespace Capstone.Controllers
         // GET: Event
         public ActionResult CreateEvent()
         {
-
+            if (SessionManager.LoggedIn == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         
@@ -29,6 +32,11 @@ namespace Capstone.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateEvent(CreateEventViewModel model)
         {
+
+            if (SessionManager.LoggedIn == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
             if (ModelState.IsValid)
             {
