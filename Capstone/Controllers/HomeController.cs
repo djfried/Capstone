@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Capstone.Managers;
+using Capstone.Container_Classes;
 
 namespace Capstone.Controllers
 {
@@ -13,9 +15,16 @@ namespace Capstone.Controllers
         {
             return View();
         }
+        
+        // When the events page is loaded find all events to display to the user. 
         public ActionResult Events()
         {
-            return View();
+            EventsViewModels eventsModel = new EventsViewModels();
+            EventManager eventManager = new EventManager();
+            
+            eventsModel = eventManager.GetAllEvents();
+
+            return View(eventsModel);
         }
     }
 }
