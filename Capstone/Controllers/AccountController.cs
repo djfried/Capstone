@@ -454,11 +454,22 @@ namespace Capstone.Controllers
         [AllowAnonymous]
         public ActionResult UpdateAccount()
         {
+            
             if (SessionManager.LoggedIn == false)
             {
                 return RedirectToAction("Index", "Home");
             }
             return View();
+        }
+        //
+        //POST: /account/UpdateAccount
+        public ActionResult UpdateAccount(RegisterViewModel model)
+        {
+            if (SessionManager.LoggedIn == false)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
         }
 
         protected override void Dispose(bool disposing)
