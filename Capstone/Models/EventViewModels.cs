@@ -13,7 +13,10 @@ namespace Capstone.Models
         // A single object to pass to the view to be displayed.
         // Used in CreateEvent, UpdateEvent, CancelEvent
         public Event Event { get; set; }
-
+        public int getSelectedId()
+        {
+            return 0;
+        }
         
     }
     public class CreateEventViewModel

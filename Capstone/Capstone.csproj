@@ -223,6 +223,7 @@
     <Compile Include="Managers\SessionManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\EventSelectViewModel.cs" />
     <Compile Include="Models\EventsViewModels.cs" />
     <Compile Include="Models\EventViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />

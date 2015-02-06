@@ -16,6 +16,14 @@ namespace Capstone.Controllers
 {
     public class EventController : Controller
     {
+        //post: event/details
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Details(int eventID)
+        {
+
+            return View();
+        }
         // GET: Event
         public ActionResult CreateEvent()
         {
