@@ -345,24 +345,31 @@ namespace Capstone.Controllers
         public ActionResult UpdateAccount()
         {
             
+            
             if (SessionManager.LoggedIn == false)
             {
                 return RedirectToAction("Index", "Home");
             }
+            else
+            {
+                UserManager um = new UserManager();
+                UserViewModels user = um.GetUserByID(SessionManager.SessionID);
+                return View(user);
+            }
 
-            return View();
+            
         }
-        //
+        
         //POST: /Account/UpdateAccount
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateAccount(UpdateAccountViewModel model)
+        public ActionResult Update(UserViewModels model)
         {
             if (SessionManager.LoggedIn == false)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Events", "Home");
             }
-            return View(model);
+            return RedirectToAction("Events", "Home");
         }
 
         protected override void Dispose(bool disposing)
